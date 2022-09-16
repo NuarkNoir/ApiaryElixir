@@ -7,9 +7,9 @@ defmodule LineExecutor do
     {~r/CLEAR/, :clear},
     {~r/SORT.*/, :sort},
     {~r/EXIT( \d+)?/, :exit},
-    {~r/RENAME.*/, :rename}
+    {~r/RENAME.*/, :rename},
+    {~r/REM.*/, :rem}
     # TODO: CSPD
-    # TODO: REM
   ]
 
   @allowedProps [
@@ -103,6 +103,13 @@ defmodule LineExecutor do
     end
   end
 
+  defp execute({:rem, line, entities_list}) do
+    case line |> String.split(~r/ /, trim: true) |> Enum.drop(1) do
+      ["if", attr, op, value] -> rem_impl(entities_list, attr, op, value)
+      parts -> IO.puts "Wrong args for rem command: #{inspect(parts)}"; entities_list
+    end
+  end
+
   defp print_impl(list, idx) do
     case list do
       [] -> :ok
@@ -116,6 +123,34 @@ defmodule LineExecutor do
       [] -> IO.puts "No entity at such index"; list
       [head | tail] when idx == 0 -> [Map.put(head, "name", new_name) | tail]
       [head | tail] -> [head | rename_impl(tail, idx - 1, new_name)]
+    end
+  end
+
+  defp rem_impl(list, attr, op, value) do
+    cond do
+      attr not in @allowedProps -> IO.puts "Unknown attribute for rem command: #{attr}"; list
+      op not in ["<", ">", "=", "!="] -> IO.puts "Unknown operator for rem command: #{op}"; list
+      true -> rem_impl_rec(list, attr, op, value)
+    end
+  end
+
+  defp rem_impl_rec(list, attr, op, value) do
+    case list do
+      [] -> []
+      [head | tail] ->
+        attrv = if attr in ["dest", "name"], do: head[attr], else: Utils.safeIntParse(head[attr], head[attr])
+        valv = if attr in ["dest", "name"], do: value, else: Utils.safeIntParse(value, value)
+        if rem_impl_op(attrv, op, valv), do: rem_impl_rec(tail, attr, op, value), else: [head | rem_impl_rec(tail, attr, op, value)]
+    end
+  end
+
+  defp rem_impl_op(value, op, value2) do
+    case op do
+      "=" -> value == value2
+      "!=" -> value != value2
+      ">" -> value > value2
+      "<" -> value < value2
+      _ -> false
     end
   end
 end
