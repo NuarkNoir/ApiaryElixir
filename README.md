@@ -2,20 +2,15 @@
 
 **TODO: Add description**
 
-## Installation
+## Usage
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `apiary_elixir` to your list of dependencies in `mix.exs`:
+For now you cannot provide path to executable script
 
-```elixir
-def deps do
-  [
-    {:apiary_elixir, "~> 0.1.0"}
-  ]
-end
+```bash
+mix run -e Apiary.CLI.main
 ```
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/apiary_elixir>.
+be found at <https://hexdocs.pm/apiary_elixir>
 
