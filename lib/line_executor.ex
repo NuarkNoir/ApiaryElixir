@@ -5,10 +5,14 @@ defmodule LineExecutor do
     {~r/PRINT/, :print},
     {~r/ADD.*/, :add},
     {~r/CLEAR/, :clear},
+    {~r/SORT.*/, :sort}
     # TODO: CSPD
     # TODO: RENAME
-    # TODO: SORT
     # TODO: REM
+  ]
+
+  @allowedProps [
+    "spd", "dist", "dest", "name", "disp", "year", "len", "cap", "cnt"
   ]
 
   def processLines(lines) do
@@ -68,6 +72,15 @@ defmodule LineExecutor do
 
   defp execute({:clear, _, _}) do
     []
+  end
+
+  defp execute({:sort, line, entities_list}) do
+    attr = line |> String.split(~r/ /, trim: true) |> Enum.drop(1) |> Enum.at(0)
+    cond do
+      attr == nil -> IO.puts "No attribute specified for sorting"; entities_list
+      attr in @allowedProps -> entities_list |> Enum.sort_by(&(&1[attr]))
+      true -> IO.puts "Unknown sorting attribute: #{attr}"; entities_list
+    end
   end
 
   defp print_impl(list, idx) do
