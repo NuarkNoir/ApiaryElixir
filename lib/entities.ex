@@ -1,20 +1,31 @@
 defmodule Entities do
+  @moduledoc """
+  This module contains utils for the entities in the Apiary.
+  """
 
   @destinationPrefixes [
     "гор.", "д.", "п.г.т.", "с."
   ]
 
+  @doc """
+  This function creates boat entity map
+  """
   def createBoat(spd, dist, dest, name, disp, year) do
     checkDestinationPrefix(dest)
     create("boat", %{"dist" => Utils.toInt(dist), "dest" => dest, "name" => name, "spd" => Utils.toInt(spd), "disp" => Utils.toInt(disp), "year" => Utils.toInt(year)})
   end
 
+  @doc """
+  This function creates plane entity map
+  """
   def createPlane(spd, dist, dest, name, len, cap) do
     checkDestinationPrefix(dest)
     create("plane", %{"spd" => Utils.toInt(spd), "dist" => Utils.toInt(dist), "dest" => dest, "name" => name, "len" => Utils.toInt(len), "cap" => Utils.toInt(cap)})
   end
 
-  @spec createTrain(any, any, any, any, any) :: %{optional(<<_::24, _::_*8>>) => any}
+  @doc """
+  This function creates train entity map
+  """
   def createTrain(spd, dist, dest, name, cnt) do
     checkDestinationPrefix(dest)
     create("train", %{"cnt" => Utils.toInt(cnt), "dist" => Utils.toInt(dist), "dest" => dest, "name" => name, "spd" => Utils.toInt(spd)})
@@ -33,6 +44,9 @@ defmodule Entities do
 end
 
 defimpl String.Chars, for: Map do
+  @doc """
+  This function converts any map to string, and nicely does it for our entities
+  """
   def to_string(map) do
     case map["type"] do
       "train" -> "Train: #{map["name"]}, #{map["spd"]}km/h, #{map["dist"]}km, #{map["dest"]}, #{map["cnt"]} passengers"

@@ -1,4 +1,8 @@
 defmodule LineExecutor do
+  @moduledoc """
+  This module contains the logic for processing the lines from the input file.
+  """
+
   @cmdtypes [
     {~r/#.*/, :ignore},
     {~r/ECHO.*/, :echo},
@@ -16,6 +20,9 @@ defmodule LineExecutor do
     "spd", "dist", "dest", "name", "disp", "year", "len", "cap", "cnt"
   ]
 
+  @doc """
+  This function processes the lines from the input file.
+  """
   def processLines(lines) do
     case lines do
       [] -> :ok

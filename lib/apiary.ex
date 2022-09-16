@@ -1,6 +1,14 @@
 defmodule Apiary.CLI do
-  def main() do
-    "D:/apiary_elixir/tests.sota" |> get_file_lines |> LineExecutor.processLines
+  @moduledoc """
+  This is the main module for the Apiary CLI.
+  """
+
+  @doc """
+  This is the main entry point for the Apiary CLI.
+  """
+  def main(path \\ "") do
+    IO.puts "Loading data from '#{path}'"
+    path |> get_file_lines |> LineExecutor.processLines
   end
 
   defp get_file_lines(file) do
