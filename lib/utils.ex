@@ -4,9 +4,22 @@ defmodule Utils do
   end
 
   def safeIntParse(value, replacement) do
-    Integer.parse(value) |> case do
-      {intv, _} -> intv
-      _ -> replacement
+    cond do
+      is_binary(value) -> Integer.parse(value) |> case do
+        {intv, _} -> intv
+        _ -> replacement
+      end
+      true -> replacement
+    end
+  end
+
+  def toInt(value) do
+    cond do
+      is_binary(value) -> Integer.parse(value) |> case do
+        {intv, _} -> intv
+        _ -> value
+      end
+      true -> value
     end
   end
 end

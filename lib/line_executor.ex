@@ -63,11 +63,15 @@ defmodule LineExecutor do
   end
 
   defp execute({:add, line, entities_list}) do
-    entities_list ++ case line |> String.split(~r/ /, trim: true) |> Enum.drop(1) do
-      ["train", name, cnt, spd, dist, prefix, dest] -> [Entities.createTrain(spd, dist, "#{prefix} #{dest}", name, cnt)]
-      ["boat", name, disp, year, spd, dist, prefix, dest] -> [Entities.createBoat(spd, dist, "#{prefix} #{dest}", name, disp, year)]
-      ["plane", name, cap, spd, dist, len, prefix, dest] -> [Entities.createPlane(spd, dist, "#{prefix} #{dest}", name, len, cap)]
-      parts -> IO.puts "Wrong args for add command: #{inspect(parts)}"; []
+    try do
+      entities_list ++ case line |> String.split(~r/ /, trim: true) |> Enum.drop(1) do
+        ["train", name, cnt, spd, dist, prefix, dest] -> [Entities.createTrain(spd, dist, "#{prefix} #{dest}", name, cnt)]
+        ["boat", name, disp, year, spd, dist, prefix, dest] -> [Entities.createBoat(spd, dist, "#{prefix} #{dest}", name, disp, year)]
+        ["plane", name, cap, spd, dist, len, prefix, dest] -> [Entities.createPlane(spd, dist, "#{prefix} #{dest}", name, len, cap)]
+        parts -> IO.puts "Wrong args for add command: #{inspect(parts)}"; []
+      end
+    rescue
+      e -> IO.puts "ADD error: #{Exception.message(e)}"; entities_list
     end
   end
 

@@ -1,6 +1,6 @@
 defmodule Apiary.CLI do
   def main() do
-    "#D:/apiary_elixir/tests.sota" |> get_file_lines |> LineExecutor.processLines
+    "D:/apiary_elixir/tests.sota" |> get_file_lines |> LineExecutor.processLines
   end
 
   defp get_file_lines(file) do

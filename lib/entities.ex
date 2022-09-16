@@ -6,18 +6,18 @@ defmodule Entities do
 
   def createBoat(spd, dist, dest, name, disp, year) do
     checkDestinationPrefix(dest)
-    create("boat", %{"dist" => dist, "dest" => dest, "name" => name, "spd" => spd, "disp" => disp, "year" => year})
+    create("boat", %{"dist" => Utils.toInt(dist), "dest" => dest, "name" => name, "spd" => Utils.toInt(spd), "disp" => Utils.toInt(disp), "year" => Utils.toInt(year)})
   end
 
   def createPlane(spd, dist, dest, name, len, cap) do
     checkDestinationPrefix(dest)
-    create("plane", %{"spd" => spd, "dist" => dist, "dest" => dest, "name" => name, "len" => len, "cap" => cap})
+    create("plane", %{"spd" => Utils.toInt(spd), "dist" => Utils.toInt(dist), "dest" => dest, "name" => name, "len" => Utils.toInt(len), "cap" => Utils.toInt(cap)})
   end
 
   @spec createTrain(any, any, any, any, any) :: %{optional(<<_::24, _::_*8>>) => any}
   def createTrain(spd, dist, dest, name, cnt) do
     checkDestinationPrefix(dest)
-    create("train", %{"cnt" => cnt, "dist" => dist, "dest" => dest, "name" => name, "spd" => spd})
+    create("train", %{"cnt" => Utils.toInt(cnt), "dist" => Utils.toInt(dist), "dest" => dest, "name" => name, "spd" => Utils.toInt(spd)})
   end
 
   defp create(type, params) do
