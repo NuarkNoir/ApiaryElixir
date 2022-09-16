@@ -58,10 +58,11 @@ defmodule LineExecutor do
   end
 
   defp execute({:add, line, entities_list}) do
-    try do
-      entities_list ++ [add_impl(line)]
-    rescue
-      e -> IO.inspect(Exception.message(e)); entities_list
+    entities_list ++ case line |> String.split(~r/ /, trim: true) |> Enum.drop(1) do
+      ["train", name, cnt, spd, dist, prefix, dest] -> [Entities.createTrain(spd, dist, "#{prefix} #{dest}", name, cnt)]
+      ["boat", name, disp, year, spd, dist, prefix, dest] -> [Entities.createBoat(spd, dist, "#{prefix} #{dest}", name, disp, year)]
+      ["plane", name, cap, spd, dist, len, prefix, dest] -> [Entities.createPlane(spd, dist, "#{prefix} #{dest}", name, len, cap)]
+      parts -> IO.puts "Wrong args for add command: #{inspect(parts)}"; []
     end
   end
 
@@ -73,15 +74,6 @@ defmodule LineExecutor do
     case list do
       [] -> :ok
       [head | tail] -> IO.puts "#{idx} - #{head}"; print_impl(tail, idx + 1)
-    end
-  end
-
-  defp add_impl(line) do
-    case line |> String.split(~r/ /, trim: true) |> Enum.drop(1) do
-      ["train", name, cnt, spd, dist, prefix, dest] -> Entities.createTrain(spd, dist, "#{prefix} #{dest}", name, cnt)
-      ["boat", name, disp, year, spd, dist, prefix, dest] -> Entities.createBoat(spd, dist, "#{prefix} #{dest}", name, disp, year)
-      ["plane", name, cap, spd, dist, len, prefix, dest] -> Entities.createPlane(spd, dist, "#{prefix} #{dest}", name, len, cap)
-      _ -> raise "Wrong args for add command: #{line}"
     end
   end
 end
