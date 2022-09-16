@@ -8,8 +8,8 @@ defmodule LineExecutor do
     {~r/SORT.*/, :sort},
     {~r/EXIT( \d+)?/, :exit},
     {~r/RENAME.*/, :rename},
-    {~r/REM.*/, :rem}
-    # TODO: CSPD
+    {~r/REM.*/, :rem},
+    {~r/CSPD/, :cspd}
   ]
 
   @allowedProps [
@@ -110,6 +110,15 @@ defmodule LineExecutor do
     end
   end
 
+  defp execute({:cspd, _, entities_list}) do
+    IO.puts "Entities in list: #{entities_list |> Enum.count}"
+    case entities_list do
+      [] -> IO.puts("No entities in list")
+      _ -> cspd_impl(entities_list, 0)
+    end
+    entities_list
+  end
+
   defp print_impl(list, idx) do
     case list do
       [] -> :ok
@@ -151,6 +160,16 @@ defmodule LineExecutor do
       ">" -> value > value2
       "<" -> value < value2
       _ -> false
+    end
+  end
+
+  defp cspd_impl(list, idx) do
+    case list do
+      [] -> :ok
+      [head | tail] ->
+        IO.puts "#{idx} - #{head["name"]} will cover distance of #{head["dist"]}km
+                to #{head["dest"]} with speed #{head["spd"]}km/h in #{head["dist"] / head["spd"]}h"
+        cspd_impl(tail, idx + 1)
     end
   end
 end
