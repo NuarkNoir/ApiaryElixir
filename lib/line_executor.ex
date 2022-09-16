@@ -5,7 +5,8 @@ defmodule LineExecutor do
     {~r/PRINT/, :print},
     {~r/ADD.*/, :add},
     {~r/CLEAR/, :clear},
-    {~r/SORT.*/, :sort}
+    {~r/SORT.*/, :sort},
+    {~r/EXIT( \d+)?/, :exit}
     # TODO: CSPD
     # TODO: RENAME
     # TODO: REM
@@ -80,6 +81,15 @@ defmodule LineExecutor do
       attr == nil -> IO.puts "No attribute specified for sorting"; entities_list
       attr in @allowedProps -> entities_list |> Enum.sort_by(&(&1[attr]))
       true -> IO.puts "Unknown sorting attribute: #{attr}"; entities_list
+    end
+  end
+
+  defp execute({:exit, line, _}) do
+    code = line |> String.split(~r/ /, trim: true) |> Enum.drop(1) |> Enum.at(0)
+    IO.puts "Exiting with code #{if code == nil, do: 0, else: code}"
+    case code do
+      nil -> System.halt(0)
+      _ -> System.halt(String.to_integer(code))
     end
   end
 
