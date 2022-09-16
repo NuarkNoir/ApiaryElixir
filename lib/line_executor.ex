@@ -6,9 +6,9 @@ defmodule LineExecutor do
     {~r/ADD.*/, :add},
     {~r/CLEAR/, :clear},
     {~r/SORT.*/, :sort},
-    {~r/EXIT( \d+)?/, :exit}
+    {~r/EXIT( \d+)?/, :exit},
+    {~r/RENAME.*/, :rename}
     # TODO: CSPD
-    # TODO: RENAME
     # TODO: REM
   ]
 
@@ -44,7 +44,7 @@ defmodule LineExecutor do
   end
 
   defp execute({:unknown, line, entities_list}) do
-    IO.puts "Unknown command: #{line}"
+    IO.puts "Unecognized command: #{line}"
     entities_list
   end
 
@@ -93,10 +93,29 @@ defmodule LineExecutor do
     end
   end
 
+  defp execute({:rename, line, entities_list}) do
+    case line |> String.split(~r/ /, trim: true) |> Enum.drop(1) do
+      [idx, new_name] -> Integer.parse(idx) |> case do
+        {idx, _} -> rename_impl(entities_list, idx, new_name)
+        _ -> IO.puts "Wrong index value for rename command: #{idx}"; entities_list
+      end
+      parts -> IO.puts "Wrong args for rename command: #{inspect(parts)}"; entities_list
+    end
+  end
+
   defp print_impl(list, idx) do
     case list do
       [] -> :ok
       [head | tail] -> IO.puts "#{idx} - #{head}"; print_impl(tail, idx + 1)
+    end
+  end
+
+  defp rename_impl(list, idx, new_name) do
+    case list do
+      _ when idx < 0 -> IO.puts "Index must be positive"; list
+      [] -> IO.puts "No entity at such index"; list
+      [head | tail] when idx == 0 -> [Map.put(head, "name", new_name) | tail]
+      [head | tail] -> [head | rename_impl(tail, idx - 1, new_name)]
     end
   end
 end
