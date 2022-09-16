@@ -5,6 +5,10 @@ defmodule LineExecutor do
     {~r/PRINT/, :print},
     {~r/ADD.*/, :add},
     {~r/CLEAR/, :clear},
+    # TODO: CSPD
+    # TODO: RENAME
+    # TODO: SORT
+    # TODO: REM
   ]
 
   def processLines(lines) do
