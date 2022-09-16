@@ -1,16 +1,9 @@
 # Apiary
 
-**TODO: Add description**
-
 ## Usage
 
-For now you cannot provide path to executable script
+To run, use next command:
 
 ```bash
-mix run -e Apiary.CLI.main
+mix run -e 'Apiary.CLI.main "path to executable script"'
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/apiary_elixir>
-
