@@ -24,15 +24,16 @@ defmodule Utils do
   end
 
   @doc """
-  This function converts string to integer if can, or else returns original value as is
+  This function converts string to integer if can
   """
   def toInt(value) do
     cond do
+      is_integer(value) -> value
       is_binary(value) -> Integer.parse(value) |> case do
         {intv, _} -> intv
-        _ -> value
+        _ -> raise "Not a number passed to Utils.toInt/1"
       end
-      true -> value
+      true -> raise "Not a number passed to Utils.toInt/1"
     end
   end
 end

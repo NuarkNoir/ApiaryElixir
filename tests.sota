@@ -136,7 +136,25 @@ ECHO ==============================================================
 ECHO now calculating how fast they take to get there
 ADD train train1 32 16 998 гор. тест2
 ADD plane plane1 200 60 200 998 гор. тест
-ADD boat bloat1 6000 2012 100 998 гор. тест
+ADD boat bloat1 -0 99 100 998 гор. тест
 PRINT
 CSPD
 ECHO ==============================================================
+SORT name
+PRINT
+
+REM if spd > 99
+SORT name
+PRINT
+
+REM if spd > 20
+SORT name
+PRINT
+
+REM if spd > 10
+SORT name
+PRINT
+
+REM if spd > 10
+SORT name
+PRINT
